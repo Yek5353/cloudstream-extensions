@@ -17,5 +17,26 @@
         "description": "Example CloudStream provider",
         "url": "https://raw.githubusercontent.com/Yek5353/cloudstream-extensions/builds/ExampleProvider.cs3",
         "name": "ExampleProvider"
+    },
+    {
+        "iconUrl": "https://puhutv.com/favicon.ico",
+        "fileHash": "sha256-d76d7135a57cf97f1b7d8a57762263e9a7d429b3ca53accd1ee842c297172595",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Yek5353/cloudstream-extensions",
+        "fileSize": 14153,
+        "status": 1,
+        "language": "tr",
+        "authors": [
+            "Yek5353"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "PuhuTV",
+        "description": "PuhuTV i\u00e7erik sa\u011flay\u0131c\u0131s\u0131",
+        "url": "https://raw.githubusercontent.com/Yek5353/cloudstream-extensions/builds/PuhuTV.cs3",
+        "name": "PuhuTV"
     }
 ]
