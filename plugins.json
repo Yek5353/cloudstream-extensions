@@ -1,1 +1,21 @@
-[]
+[
+    {
+        "fileHash": "sha256-3e20c653716f998c18275fdb3a5b6fc31ae59326e34716560db5f560b8307990",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Yek5353/cloudstream-extensions",
+        "fileSize": 2331,
+        "status": 3,
+        "language": "tr",
+        "authors": [
+            "Yek5353"
+        ],
+        "tvTypes": [
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "ExampleProvider",
+        "description": "Example CloudStream provider",
+        "url": "https://raw.githubusercontent.com/Yek5353/cloudstream-extensions/builds/ExampleProvider.cs3",
+        "name": "ExampleProvider"
+    }
+]
