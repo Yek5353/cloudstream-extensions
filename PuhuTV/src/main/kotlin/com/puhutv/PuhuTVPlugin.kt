@@ -79,7 +79,7 @@ class PuhuTVProvider : MainAPI() {
    if (!streamUrl.startsWith("https://")) continue
    val quality: Int = video.optInt("quality", Qualities.Unknown.value)
    val format: String = video.optString("video_format")
-   callback(newExtractorLink(source = name, name = if (quality > 0) "$name ${quality}p" else name, url = streamUrl, type = if (format == "hls" || streamUrl.contains(".m3u8", true)) ExtractorLinkType.M3U8 else ExtractorLinkType.UNKNOWN) { quality = quality; referer = "$mainUrl/" })
+   callback(newExtractorLink(source = name, name = if (quality > 0) "$name ${quality}p" else name, url = streamUrl, type = if (format == "hls" || streamUrl.contains(".m3u8", true)) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO) { this.quality = quality; referer = "$mainUrl/" })
   }
   return true
  }
