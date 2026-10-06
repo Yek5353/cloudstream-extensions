@@ -10,8 +10,10 @@ import com.lagradost.cloudstream3.utils.Qualities
 import org.json.JSONObject
 import org.jsoup.nodes.Element
 import java.util.Locale
+
 @CloudstreamPlugin
 class PuhuTVPlugin : Plugin() { override fun load(context: Context) { registerMainAPI(PuhuTVProvider()) } }
+
 class PuhuTVProvider : MainAPI() {
  override var mainUrl = "https://puhutv.com"
  override var name = "PuhuTV"
@@ -19,34 +21,72 @@ class PuhuTVProvider : MainAPI() {
  override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
  override val hasMainPage = true
  override val mainPage = mainPageOf("/" to "Ana Sayfa", "/dizi" to "Diziler", "/yerli-diziler" to "Yerli Diziler", "/puhutv-orijinal" to "PuhuTV Orijinal")
+
  override suspend fun search(query: String): List<SearchResponse> {
   val slug: String = query.slug()
   if (slug.isBlank()) return emptyList()
   val data: JSONObject = try { JSONObject(app.get("$mainUrl/api/slug/$slug-detay").text).getJSONObject("data") } catch (_: Exception) { return emptyList() }
-  val assets = data.optJSONArray("assets")
-  val firstAsset: JSONObject? = if (assets == null || assets.length() == 0) null else assets.optJSONObject(0)
-  val assetSlug: String = if (firstAsset == null) slug else firstAsset.optString("slug").removeSuffix("-izle")
   val title: String = data.optString("name").ifBlank { slug.titleTr() }
+  val seasons = data.optJSONArray("seasons")
   val content: JSONObject? = data.optJSONObject("content")
   val poster: String? = if (content == null) null else content.image()
-  return listOf(newMovieSearchResponse(title, "$mainUrl/$assetSlug-izle", TvType.Movie) { posterUrl = poster })
+  return if (seasons != null && seasons.length() > 0) {
+   listOf(newTvSeriesSearchResponse(title, "$mainUrl/$slug-detay") { posterUrl = poster })
+  } else {
+   val assets = data.optJSONArray("assets")
+   val firstAsset: JSONObject? = if (assets == null || assets.length() == 0) null else assets.optJSONObject(0)
+   val videoSlug: String = if (firstAsset == null) slug else firstAsset.optString("slug").removeSuffix("-izle")
+   listOf(newMovieSearchResponse(title, "$mainUrl/$videoSlug-izle", TvType.Movie) { posterUrl = poster })
+  }
  }
+
  override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
   val path: String = request.data.ifBlank { "/" }
   val document = app.get(mainUrl + path).document
-  val results: List<SearchResponse> = document.select("a[href*=-izle]").mapNotNull { element -> element.toResponse() }.distinctBy { it.url }.take(40)
+  val results: List<SearchResponse> = document.select("a[href*=-detay], a[href*=-izle]").mapNotNull { element -> element.toResponse() }.distinctBy { it.url }.take(40)
   return newHomePageResponse(request.name, results, hasNext = false)
  }
+
  override suspend fun load(url: String): LoadResponse? {
-  val slug: String = url.substringAfter(mainUrl).substringBefore("?").trim('/').removeSuffix("-izle")
-  val data: JSONObject = try { JSONObject(app.get("$mainUrl/api/slug/$slug-izle").text).getJSONObject("data") } catch (_: Exception) { return null }
+  val requestedPath: String = url.substringAfter(mainUrl).substringBefore("?").trim('/')
+  val isDetail: Boolean = requestedPath.endsWith("-detay")
+  val slug: String = requestedPath.removeSuffix("-detay").removeSuffix("-izle")
+  if (slug.isBlank()) return null
+  val suffix: String = if (isDetail) "-detay" else "-izle"
+  val data: JSONObject = try { JSONObject(app.get("$mainUrl/api/slug/$slug$suffix").text).getJSONObject("data") } catch (_: Exception) { return null }
   val title: String = data.optString("name").ifBlank { slug.titleTr() }
-  val watchUrl: String = "$mainUrl/$slug-izle"
   val content: JSONObject? = data.optJSONObject("content")
   val poster: String? = if (content == null) null else content.image()
-  val description: String = data.optString("description")
-  return newMovieLoadResponse(title, watchUrl, TvType.Movie, watchUrl) { posterUrl = poster; plot = description.takeIf { it.isNotBlank() } }
+  val seasons = data.optJSONArray("seasons")
+  if (isDetail && seasons != null && seasons.length() > 0) {
+   val episodes = mutableListOf<Episode>()
+   for (seasonIndex in 0 until seasons.length()) {
+    val season: JSONObject = seasons.optJSONObject(seasonIndex) ?: continue
+    val seasonId: String = season.optString("id")
+    if (seasonId.isBlank()) continue
+    val seasonData: JSONObject = try { JSONObject(app.get("https://galadriel.puhutv.com/seasons/$seasonId?page=1&per=40").text) } catch (_: Exception) { continue }
+    val seasonNumber: Int = season.optInt("number", seasonIndex + 1)
+    val seasonEpisodes = seasonData.optJSONArray("episodes") ?: continue
+    for (episodeIndex in 0 until seasonEpisodes.length()) {
+     val episodeJson: JSONObject = seasonEpisodes.optJSONObject(episodeIndex) ?: continue
+     val episodePath: String = episodeJson.optString("slugPath")
+     if (episodePath.isBlank()) continue
+     episodes.add(newEpisode("$mainUrl/" + episodePath.trimStart('/')) {
+      name = episodeJson.optString("name").ifBlank { episodeJson.optString("eventLabel") }
+      season = seasonNumber
+      episode = episodeJson.optInt("number", episodeIndex + 1)
+     })
+    }
+   }
+   return newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) { posterUrl = poster; plot = data.optString("description").takeIf { it.isNotBlank() } }
+  }
+  val assets = data.optJSONArray("assets")
+  val firstAsset: JSONObject? = if (assets == null || assets.length() == 0) null else assets.optJSONObject(0)
+  val videoSlug: String = if (firstAsset == null) slug else firstAsset.optString("slug").removeSuffix("-izle")
+  val watchUrl: String = "$mainUrl/$videoSlug-izle"
+  return newMovieLoadResponse(title, watchUrl, TvType.Movie, watchUrl) { posterUrl = poster; plot = data.optString("description").takeIf { it.isNotBlank() } }
  }
+
  override suspend fun loadLinks(data: String, isCasting: Boolean, subtitleCallback: (SubtitleFile) -> Unit, callback: (ExtractorLink) -> Unit): Boolean {
   val slug: String = data.substringAfter(mainUrl).substringBefore("?").trim('/').removeSuffix("-izle")
   val info: JSONObject = try { JSONObject(app.get("$mainUrl/api/slug/$slug-izle").text).getJSONObject("data") } catch (_: Exception) { return false }
@@ -63,18 +103,21 @@ class PuhuTVProvider : MainAPI() {
   }
   return true
  }
+
  private fun Element.toResponse(): SearchResponse? {
   val href: String = attr("abs:href")
   if (!href.startsWith("$mainUrl/")) return null
   val slug: String = href.substringAfterLast("/").substringBefore("?")
-  if (!slug.endsWith("-izle")) return null
+  val isDetail: Boolean = slug.endsWith("-detay")
+  if (!isDetail && !slug.endsWith("-izle")) return null
   val image: Element? = selectFirst("img")
   val alt: String = if (image == null) "" else image.attr("alt")
-  val title: String = if (alt.isNotBlank()) alt else slug.removeSuffix("-izle").titleTr()
+  val title: String = if (alt.isNotBlank()) alt else slug.removeSuffix("-detay").removeSuffix("-izle").titleTr()
   val poster: String? = if (image == null) null else { val src: String = image.attr("abs:src"); if (src.isNotBlank()) src else image.attr("abs:data-src") }
-  return newMovieSearchResponse(title, href, TvType.Movie) { posterUrl = poster }
+  return if (isDetail) newTvSeriesSearchResponse(title, href) { posterUrl = poster } else newMovieSearchResponse(title, href, TvType.Movie) { posterUrl = poster }
  }
 }
+
 private fun JSONObject.image(): String? {
  val images: JSONObject = optJSONObject("images") ?: return null
  val keys = images.keys()
