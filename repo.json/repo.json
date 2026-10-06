@@ -1,8 +1,0 @@
-{
-  "name": "CloudStream Extensions",
-  "description": "CloudStream eklenti deposu",
-  "manifestVersion": 1,
-  "pluginLists": [
-    "https://raw.githubusercontent.com/Yek5353/cloudstream-extensions/main/builds/plugins.json"
-  ]
-}
