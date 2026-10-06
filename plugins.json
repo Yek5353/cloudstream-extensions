@@ -20,10 +20,10 @@
     },
     {
         "iconUrl": "https://puhutv.com/favicon.ico",
-        "fileHash": "sha256-d76d7135a57cf97f1b7d8a57762263e9a7d429b3ca53accd1ee842c297172595",
+        "fileHash": "sha256-5a13809c8d2b36494e6d71fc538f71aae92cafe3c7a53e0d337e7354cc83de82",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Yek5353/cloudstream-extensions",
-        "fileSize": 14153,
+        "fileSize": 14075,
         "status": 1,
         "language": "tr",
         "authors": [
