@@ -4,6 +4,8 @@ import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.plugins.Plugin
 import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.ExtractorLinkType
+import com.lagradost.cloudstream3.utils.newExtractorLink
 import com.lagradost.cloudstream3.utils.Qualities
 import org.json.JSONObject
 import org.jsoup.nodes.Element
@@ -77,7 +79,7 @@ class PuhuTVProvider : MainAPI() {
    if (!streamUrl.startsWith("https://")) continue
    val quality: Int = video.optInt("quality", Qualities.Unknown.value)
    val format: String = video.optString("video_format")
-   callback(ExtractorLink(source = name, name = if (quality > 0) "$name ${quality}p" else name, url = streamUrl, referer = "$mainUrl/", quality = quality, isM3u8 = format == "hls" || streamUrl.contains(".m3u8", true)))
+   callback(newExtractorLink(source = name, name = if (quality > 0) "$name ${quality}p" else name, url = streamUrl, type = if (format == "hls" || streamUrl.contains(".m3u8", true)) ExtractorLinkType.M3U8 else ExtractorLinkType.UNKNOWN) { quality = quality; referer = "$mainUrl/" })
   }
   return true
  }
