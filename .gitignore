@@ -1,9 +1,117 @@
+# ==============================================================================
+# CloudStream TR — Git Ignore Configuration
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. AI Agents, Assistants & Workflow Tooling
+# ------------------------------------------------------------------------------
+.opencode/
+opencode.jsonc
+.ai-workflow/
+.agents/
+AGENTS.md
+README_KURULUM_TR.md
+OPTIONAL_GITIGNORE_SNIPPET.txt
+00_BURADAN_BASLA.txt
+*_DEGISIKLIKLER.txt
+.gemini/
+.cursor/
+.cursorrules
+.claude/
+*.prompt
+*.prompt.md
+
+# ------------------------------------------------------------------------------
+# 2. Security, Secrets, Credentials & Signing Material
+# ------------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.token
+*.secret
+*.key
+*.pem
+*.pfx
+*.p12
+*.jks
+*.keystore
+google-services.json
+service-account*.json
+credentials*.json
+secrets*.json
+auth*.json
+cookies*.json
+session*.json
+
+# ------------------------------------------------------------------------------
+# 3. IDE & Editor Local Settings
+# ------------------------------------------------------------------------------
+*.iml
+/.idea/
+.vscode/
+.fleet/
+.idea_modules/
+
+# ------------------------------------------------------------------------------
+# 4. Gradle & Kotlin Local Caches
+# ------------------------------------------------------------------------------
 .gradle/
-.idea/
+.kotlin/
+**/.gradle/
+
+# ------------------------------------------------------------------------------
+# 5. Android & SDK Local Configuration
+# ------------------------------------------------------------------------------
+/local.properties
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# ------------------------------------------------------------------------------
+# 6. Build Outputs & Artifacts
+# ------------------------------------------------------------------------------
 build/
 **/build/
-local.properties
-*.iml
 *.apk
+*.aab
+*.cs3
 *.jar
-*.class
+# Gradle Wrapper JAR is part of the project and MUST be versioned
+!gradle/wrapper/gradle-wrapper.jar
+
+# ------------------------------------------------------------------------------
+# 7. Python Tooling & Caches
+# ------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+cache/
+cache/*.db
+.scrapling/
+
+# ------------------------------------------------------------------------------
+# 8. Logs, Temp Data & Diagnostic Reports
+# ------------------------------------------------------------------------------
+*.log
+*.tmp
+*.temp
+reports/temp/
+reports/*.html
+reports/probe_*.json
+reports/probes/
+legacy_plugins_raw.json
+legacy_plugins_decoded.json
+
+# ------------------------------------------------------------------------------
+# 9. OS Metadata
+# ------------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+.*

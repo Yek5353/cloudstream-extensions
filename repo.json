@@ -1,6 +1,6 @@
 {
-  "name": "CloudStream Extensions",
-  "description": "CloudStream eklenti deposu",
+  "name": "Yek5353 CloudStream TR",
+  "description": "Yek5353 tarafından yayımlanan Türkçe CloudStream sağlayıcıları",
   "manifestVersion": 1,
   "pluginLists": [
     "https://raw.githubusercontent.com/Yek5353/cloudstream-extensions/builds/plugins.json"
