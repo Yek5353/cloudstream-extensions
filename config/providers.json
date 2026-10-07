@@ -1582,7 +1582,7 @@
     {
       "name": "PuhuTV",
       "module": "PuhuTV",
-      "enabled": true,
+      "enabled": false,
       "language": "tr",
       "types": [
         "TvSeries",
@@ -1622,7 +1622,8 @@
             "/register"
           ]
         }
-      }
+      },
+      "disabledReason": "DISABLED_UNSUPPORTED: PuhuTV is not included in the CloudStreamHub bundled/runtime provider inventory."
     },
     {
       "name": "ExampleProvider",

@@ -39,7 +39,6 @@ Depo, yayınlanan eklenti paketlerini `builds` dalındaki `plugins.json` üzerin
 | Dizigecesi | `Dizigecesi` | Dizi, film |
 | RareFilmm | `RareFilmm` | Film |
 | YTS | `YTS` | Torrent, film |
-| PuhuTV | `PuhuTV` | Film, dizi |
 
 Etkinlik ve kaynak sağlığı zamanla değişebilir. Devre dışı sağlayıcılar `config/providers.json` içinde işaretlenir ve CloudStream kataloğuna yayımlanmaz.
 

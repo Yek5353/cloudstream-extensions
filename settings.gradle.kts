@@ -23,7 +23,8 @@ val disabled = listOf(
     "FilmModu",
     "Sinewix",
     "TurkAnime",
-    "ExampleProvider"
+    "ExampleProvider",
+    "PuhuTV"
 )
 
 File(rootDir, ".").eachDir { dir ->
