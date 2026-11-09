@@ -16,8 +16,6 @@ Depo, yayınlanan eklenti paketlerini `builds` dalındaki `plugins.json` üzerin
 
 | Eklenti | Modül | İçerik türleri |
 | --- | --- | --- |
-| AnimeciX | `AnimeciX` | Anime |
-| BelgeselX | `BelgeselX` | Belgesel |
 | Film Makinesi | `FilmMakinesi` | Film, dizi |
 | 4KHDHub | `FourKHDHub` | Film |
 | HDFilmCehennemi | `HDFilmCehennemi` | Film, dizi |
@@ -28,20 +26,12 @@ Depo, yayınlanan eklenti paketlerini `builds` dalındaki `plugins.json` üzerin
 | DiziYou | `DiziYou` | Dizi |
 | Dizilla | `Dizilla` | Dizi |
 | FullHDFilmizlesene | `FullHDFilmizlesene` | Film |
-| JetFilmİzle | `JetFilmIzle` | Film |
 | CloudStreamHub | `CloudStreamHub` | Film, dizi, anime, çizgi dizi, belgesel |
 | DiziKorea | `DiziKorea` | Asya dizisi |
-| DramaDizilerim | `DramaDizilerim` | Asya dizisi |
-| WebDramaTurkey | `WebDramaTurkey` | Asya dizisi |
-| Animeler | `Animeler` | Anime, anime filmi |
-| SetFilmİzle | `SetFilmIzle` | Film, dizi |
 | HDFilmDelisi | `HDFilmDelisi` | Film |
-| Dizigecesi | `Dizigecesi` | Dizi, film |
-| RareFilmm | `RareFilmm` | Film |
 | YTS | `YTS` | Torrent, film |
 
-Etkinlik ve kaynak sağlığı zamanla değişebilir. Devre dışı sağlayıcılar `config/providers.json` içinde işaretlenir ve CloudStream kataloğuna yayımlanmaz.
-
+Yalnızca etkin ve doğrulanmış sağlayıcılar derlemeye alınır. Devre dışı modüller kaynak ağacında kalır ancak `config/providers.json` ve `settings.gradle.kts` üzerinden yayımlanmaz. Yeniden etkinleştirme için güncel kaynak ve oynatma doğrulaması gerekir.
 ## Derleme
 
 Geliştirme için JDK 17 ve Android SDK gerekir. Depo kökünde:
