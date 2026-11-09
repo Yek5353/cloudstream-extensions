@@ -14,17 +14,26 @@ val ignoredDirs = listOf(
 )
 
 val disabled = listOf(
+    "AnimeciX",
+    "Animeler",
+    "BelgeselX",
     "CizgiMax",
     "DDizi",
+    "Dizigecesi",
     "DiziLife",
     "DiziMom",
     "DiziPal",
+    "DramaDizilerim",
+    "ExampleProvider",
     "FilmHane",
     "FilmModu",
+    "JetFilmIzle",
+    "PuhuTV",
+    "RareFilmm",
+    "SetFilmIzle",
     "Sinewix",
     "TurkAnime",
-    "ExampleProvider",
-    "PuhuTV"
+    "WebDramaTurkey"
 )
 
 File(rootDir, ".").eachDir { dir ->
