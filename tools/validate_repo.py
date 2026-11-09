@@ -166,6 +166,8 @@ def main():
                 seen_modules.add(module)
 
                 if enabled:
+                    if p.get("disabledReason"):
+                        errors.append(f"Provider '{name}' is enabled despite disabledReason: {p.get('disabledReason')}")
                     enabled_providers.append(p)
                     # Invariant 1: Root Gradle provider module must exist
                     if module not in physical_modules:
@@ -176,6 +178,8 @@ def main():
                         errors.append(f"Enabled provider '{name}' has domainKey '{domain_key}' missing from config/domains.json!")
                     else:
                         d_info = domains_data[domain_key]
+                        if d_info.get("status") in {"dead", "blocked", "unsupported"}:
+                            errors.append(f"Provider '{name}' is enabled despite domain status '{d_info.get('status')}'")
                         canonical = d_info.get("canonical")
                         if not canonical or not (canonical.startswith("https://") or canonical.startswith("http://")):
                             errors.append(f"Provider '{name}' has invalid canonical URL in domains.json: {canonical}")
